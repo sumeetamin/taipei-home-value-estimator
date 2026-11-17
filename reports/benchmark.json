@@ -1,0 +1,32 @@
+{
+  "project": "Taipei Home Value Estimator",
+  "dataset_id": 477,
+  "rows": 414,
+  "features": [
+    "X1 transaction date",
+    "X2 house age",
+    "X3 distance to the nearest MRT station",
+    "X4 number of convenience stores",
+    "X5 latitude",
+    "X6 longitude"
+  ],
+  "targets": [
+    "Y house price of unit area"
+  ],
+  "split": "random 75/25 holdout; seed=42",
+  "task": "regression",
+  "holdout": {
+    "Y house price of unit area": {
+      "mae": 4.144066976599792,
+      "rmse": 6.329289945823047,
+      "r2": 0.7474450737350844,
+      "median_baseline_mae": 10.927884615384615
+    }
+  },
+  "limitations": "Public benchmark; holdout results do not establish production performance.",
+  "source_url": "https://archive.ics.uci.edu/dataset/477",
+  "generated_at": "2026-11-17",
+  "artifacts_published": [
+    "reports/benchmark.json"
+  ]
+}
