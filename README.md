@@ -1,28 +1,34 @@
 # Taipei Home Value Estimator
 
-A small-sample regression benchmark for estimating house price per unit area from transaction and location features in the UCI Real Estate Valuation dataset.
+Estimate transaction price per unit area using location, distance, and property characteristics.
 
 ## Dataset
 
-Loads UCI dataset 477 through ucimlrepo. The row identifier is excluded from features. See the [UCI Real Estate Valuation dataset card](https://archive.ics.uci.edu/dataset/477/real+estate+valuation+data+set). The dataset contains only 414 observations, so holdout estimates are uncertain. No dataset copy is committed here.
+[UCI Real Estate Valuation dataset](https://archive.ics.uci.edu/dataset/477/real%2Bestate%2Bvaluation) (dataset ID 477), 414 records. The source is public and is fetched by the runner; the raw dataset is not committed.
 
 ## Run
 
 ```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-# macOS/Linux: source .venv/bin/activate
-pip install -r requirements.txt
-python main.py
+python -m pip install -r requirements.txt
+python main.py --output-dir artifacts
 ```
 
-The first run needs network access to fetch the dataset. You can select a different output directory with `python main.py --output-dir results`.
+The runner saves `artifacts/metrics.json`, `artifacts/holdout_predictions.csv`, and `artifacts/model.joblib`. For SMS, the UCI CC BY 4.0 archive is downloaded to the ignored `data/` cache because the repository's importer does not currently expose that dataset. The raw messages are never written to the report.
 
-## Method and outputs
+## Holdout results
 
-- Fixed random 75/25 holdout with seed 42.
-- Median imputation and a 400-tree random forest regressor.
-- Reports MAE, RMSE, and R-squared alongside a median-target baseline.
-- Writes `artifacts/metrics.json`, `artifacts/holdout_predictions.csv`, and `artifacts/model.joblib`.
+A random 75/25 split (seed 42) is used. Numeric inputs are median-imputed; a 400-tree random-forest regressor is compared with a median predictor. random 75/25 holdout; seed=42.
 
-This is an educational benchmark, not a property appraisal tool. The small, location-specific sample and random split do not establish accuracy for current market prices or other regions. No performance result is claimed until the script has been run and independently checked.
+| Target | MAE | RMSE | R² | Median baseline MAE |
+|---|---:|---:|---:|---:|
+| Y house price of unit area | 4.144 | 6.329 | 0.747 | 10.928 |
+
+Full aggregate metrics and the exact split seed are in [`reports/benchmark.json`](reports/benchmark.json).
+
+## Limits
+
+This is a small 414-row observational sample with a random split. It is not a current market valuation, causal estimate, or basis for financial decisions. These are one-time benchmark results, not service-level, production, or causal claims.
+
+## Reproducibility
+
+The model and split use seed 42. Re-running downloads source data from UCI and regenerates local artifacts. Model binaries, raw inputs, and row-level predictions are excluded from this public repository.
